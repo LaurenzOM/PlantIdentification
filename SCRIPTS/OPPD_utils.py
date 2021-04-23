@@ -178,15 +178,13 @@ def addBndBoxes2Image(path_img, color=(255, 0, 0), alpha=0.2, thickness=5):
     image = cv2.imread(path_img)
     anno = readJSONAnnotation(path_anno)
 
+
     output = image.copy()
     img_id = anno["image_id"]
 
     for plant in anno['plants']:
         bndbox = plant['bndbox']
         coor_bndbox = bndbox2polygon(bndbox)
-
         output = addPolygon2Image(output, coor_bndbox, color, alpha, thickness)
 
     return img_id, output
-
-
