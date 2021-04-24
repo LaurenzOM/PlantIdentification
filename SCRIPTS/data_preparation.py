@@ -115,7 +115,6 @@ def transform_to_darknet(all_anno: list, categories: list, dataset_type: str):
         image_name = f"{img_id}.jpeg"
         img = path+"/"+row["filename"]
         img = Image.open(img)
-        img = img.convert("RGB")
         width, height = img.size
         img.save(str(images_path / image_name), "JPEG")
         label_name = f"{img_id}.txt"
@@ -130,9 +129,9 @@ def transform_to_darknet(all_anno: list, categories: list, dataset_type: str):
                 y_min, y_max = bndbox["ymin"], bndbox["ymax"]
 
                 # normalizing coordinates
-                # TODO: not sure if done correctly
                 x_min, x_max = x_min / width, x_max / width
                 y_min, y_max = y_min / height, y_max / height
+
 
                 bbox_width = x_max - x_min
                 bbox_height = y_max - y_min

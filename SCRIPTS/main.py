@@ -1,6 +1,10 @@
 from SCRIPTS import data_preparation
 from SCRIPTS import OPPD_utils
+from ScaledYOLOv4 import models
 import time
+import torch
+import PIL.Image as Image
+
 
 if __name__ == '__main__':
 
@@ -15,3 +19,5 @@ if __name__ == '__main__':
     train_plants, val_plants = data_preparation.split_data(combined_anno)
     data_preparation.transform_to_darknet(train_plants, categories, 'train')
     data_preparation.transform_to_darknet(val_plants, categories, 'val')
+
+# Note to see yolov4-csp architecture, write in terminal: "cat /Users/laurenzohnemuller/PycharmProjects/PlantIdentification/ScaledYOLOv4/models/yolov4-csp.yaml"

@@ -3,5 +3,6 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ScaledYOLOv4" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ScaledYOLOv4/mish-cuda" vcs="Git" />
   </component>
 </project>
