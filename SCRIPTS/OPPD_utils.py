@@ -1,9 +1,8 @@
 import os
 import json
-import platform
-import pandas as pd
 import numpy as np
 import cv2
+import PIL.Image as Image
 
 
 def createIfNotExist(directory):
@@ -31,7 +30,7 @@ def getImagesInFolder(path, extensions=('.jpg', '.png')):
         for name in files:
             if name.endswith(extensions):
                 lstImages.append((root, name))
-    print(len(lstImages))
+    print("Amount of images:", len(lstImages))
     return lstImages
 
 
@@ -149,9 +148,61 @@ def addPolygon2Image(img, polygon, color=(255, 0, 0), alpha=0.2, thickness=5):
     # cv2.polylines(overlay, [corners], 1, color)
     cv2.fillPoly(overlay, polygon, color)
     cv2.addWeighted(overlay, alpha, output, 1 - alpha, 0, output)
-    cv2.polylines(output, polygon, 1, color, thickness)
+    cv2.polylines(output, polygon, 1, color, int(thickness/4))
 
     return output
+
+def resize_image(img_path):
+    path = "/Users/laurenzohnemuller/PycharmProjects/PlantIdentification/images_full_bndbox"
+    anno_path = img_path.replace('.jpg','.json')
+    img = Image.open(img_path)
+    scale_factor = 4
+    width, height = img.size
+    new_size = (int(width / scale_factor), int(height / scale_factor))
+    img = img.resize(new_size, 0)
+    print(img.size)
+    img.save(path+"/test123.jpg", "JPEG")
+
+    anno = readJSONAnnotation(anno_path)
+    for plant in anno["plants"]:
+        bndbox = plant["bndbox"]
+        bndbox['xmin'] = int(bndbox['xmin'] / scale_factor)
+        bndbox['xmax'] = int(bndbox['xmax'] / scale_factor)
+        bndbox['ymin'] = int(bndbox['ymin'] / scale_factor)
+        bndbox['ymax'] = int(bndbox['ymax'] / scale_factor)
+
+    writeJSONAnnotation(path + "/test123.json", anno)
+
+def resize_images(lstImages: list):
+    """
+
+    :param lstImages: list of tuples containing folder and filename for each image
+    :return:
+    """
+
+    path = "/Users/laurenzohnemuller/PycharmProjects/PlantIdentification/images_full_bndbox"
+
+    for image in lstImages:
+        img_path = image[0] + "/" + image[1]
+        anno_path = img_path.replace('.jpg', '.json')
+        img = Image.open(img_path)
+        width, height = img.size
+        scale_factor = 4
+        new_size = (int(width/scale_factor), int(height/scale_factor))
+        img = img.resize(new_size, 0)
+        img.save(path+"/"+image[1], "JPEG")
+
+        anno = readJSONAnnotation(anno_path)
+        for plant in anno["plants"]:
+            bndbox = plant["bndbox"]
+            bndbox['xmin'] = int(bndbox['xmin']/scale_factor)
+            bndbox['xmax'] = int(bndbox['xmax']/scale_factor)
+            bndbox['ymin'] = int(bndbox['ymin']/scale_factor)
+            bndbox['ymax'] = int(bndbox['ymax']/scale_factor)
+
+        img_name = image[1]
+        img_name = img_name.replace('.jpg', '.json')
+        writeJSONAnnotation(path+"/"+img_name, anno)
 
 
 def bndbox2polygon(bndbox):
@@ -177,8 +228,6 @@ def addBndBoxes2Image(path_img, color=(255, 0, 0), alpha=0.2, thickness=5):
     path_anno = path_img.replace('.jpg', '.json')
     image = cv2.imread(path_img)
     anno = readJSONAnnotation(path_anno)
-
-
     output = image.copy()
     img_id = anno["image_id"]
 
@@ -186,5 +235,6 @@ def addBndBoxes2Image(path_img, color=(255, 0, 0), alpha=0.2, thickness=5):
         bndbox = plant['bndbox']
         coor_bndbox = bndbox2polygon(bndbox)
         output = addPolygon2Image(output, coor_bndbox, color, alpha, thickness)
+
 
     return img_id, output
