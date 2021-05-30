@@ -1,0 +1,53 @@
+This file contains all the data errors or changes that have been made manually.
+
+
+file: /Users/laurenzohnemuller/DATA_PlantIdentification/images_full/T02_Box040_2017-09-08T07-05-21-942.jpg
+has a bounding box in the black background
+278677
+Solution: image removed
+
+
+file: /Users/laurenzohnemuller/DATA_PlantIdentification/images_full/T02_Box027_2017-10-15T05-55-23-359.jpg
+don't really know whats the problem; guess the plants on the side
+280372
+Solution: image removed
+
+file: /Users/laurenzohnemuller/DATA_PlantIdentification/images_full/T01_Box044_2017-06-15T06-50-48-107.jpg
+weird eppo plant -> '3UNCLK'
+283717
+Solution: image removed
+
+file: /Users/laurenzohnemuller/DATA_PlantIdentification/images_full/T01_Box048_2017-05-19T13-38-31-187.jpg
+has bounding box in the black background
+281427
+Solution: image removed
+
+file: /Users/laurenzohnemuller/DATA_PlantIdentification/images_full/T04_Box056_2019-07-12T06-19-33-366.jpg
+in FUMOF plant, includes SINAR once -> doesn't make sense to train on it
+341170
+Solution: image removed
+
+file: /Users/laurenzohnemuller/DATA_PlantIdentification/images_full/T04_Box056_2019-07-16T06-06-39-573.jpg
+in FUMOF plant, includes SINAR once -> doesn't make sense to train on it
+341177
+Solution: image removed
+
+file: /Users/laurenzohnemuller/DATA_PlantIdentification/images_full/T02_Box050_2017-09-05T09-18-48-260.jpg
+has a very very small bounding box with the ID: "98319fa5-891e-6eb2-792b-5fba71a43d87"
+-> probably annotation error
+Solution: image removed
+
+file: /Users/laurenzohnemuller/DATA_PlantIdentification/images_full/T02_Box040_2017-09-06T11-14-06-842.jpg
+has a very very small bounding box with the ID: "69d5cf93-46ca-e9c7-4650-7346eb5c1781"
+-> probably annotation error
+Solution: image removed
+
+file: /Users/laurenzohnemuller/DATA_PlantIdentification/images_full/T02_Box028_2017-09-12T08-51-37-884.jpg
+has a very very small bounding box with the ID: "5cb63320-126f-5d01-d006-44d6b30de3f7"
+-> probably annotation error
+Solution: image removed
+
+file: /Users/laurenzohnemuller/DATA_PlantIdentification/images_full/T02_Box040_2017-09-05T10-33-02-658.jpg
+has a very very small bounding box with the ID: "b93584c8-9dba-3537-a4f4-13e7b36f9414"
+-> probably annotation error
+Solution: image removed

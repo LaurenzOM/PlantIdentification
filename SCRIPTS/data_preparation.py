@@ -184,7 +184,7 @@ def transform_to_darknet(all_anno: list, categories: list, dataset_type: str):
 
 def contrast(img):
     """
-    This method adds contrast to a given image with a factor of 1.5, where 1 is adding no contrast.
+    This method adds contrast to a given image with a factor of 1.3, where 1 is adding no contrast.
     :param img: The given image, which is a PIL Image Object
     :return: a PIL Image object with added contrast
     """
@@ -193,9 +193,11 @@ def contrast(img):
     enhancer = ImageEnhance.Contrast(img)
 
     # contrast factor
-    factor = 1.5
+    factor = 1.4
     img_contrast = enhancer.enhance(factor)
     return img_contrast
+
+
 
 '''
 def contrast():

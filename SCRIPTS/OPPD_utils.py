@@ -152,58 +152,6 @@ def addPolygon2Image(img, polygon, color=(255, 0, 0), alpha=0.2, thickness=5):
 
     return output
 
-def resize_image(img_path):
-    path = "/Users/laurenzohnemuller/PycharmProjects/PlantIdentification/images_full_bndbox"
-    anno_path = img_path.replace('.jpg','.json')
-    img = Image.open(img_path)
-    scale_factor = 4
-    width, height = img.size
-    new_size = (int(width / scale_factor), int(height / scale_factor))
-    img = img.resize(new_size, 0)
-    print(img.size)
-    img.save(path+"/test123.jpg", "JPEG")
-
-    anno = readJSONAnnotation(anno_path)
-    for plant in anno["plants"]:
-        bndbox = plant["bndbox"]
-        bndbox['xmin'] = int(bndbox['xmin'] / scale_factor)
-        bndbox['xmax'] = int(bndbox['xmax'] / scale_factor)
-        bndbox['ymin'] = int(bndbox['ymin'] / scale_factor)
-        bndbox['ymax'] = int(bndbox['ymax'] / scale_factor)
-
-    writeJSONAnnotation(path + "/test123.json", anno)
-
-def resize_images(lstImages: list):
-    """
-
-    :param lstImages: list of tuples containing folder and filename for each image
-    :return:
-    """
-
-    path = "/Users/laurenzohnemuller/PycharmProjects/PlantIdentification/images_full_bndbox"
-
-    for image in lstImages:
-        img_path = image[0] + "/" + image[1]
-        anno_path = img_path.replace('.jpg', '.json')
-        img = Image.open(img_path)
-        width, height = img.size
-        scale_factor = 4
-        new_size = (int(width/scale_factor), int(height/scale_factor))
-        img = img.resize(new_size, 0)
-        img.save(path+"/"+image[1], "JPEG")
-
-        anno = readJSONAnnotation(anno_path)
-        for plant in anno["plants"]:
-            bndbox = plant["bndbox"]
-            bndbox['xmin'] = int(bndbox['xmin']/scale_factor)
-            bndbox['xmax'] = int(bndbox['xmax']/scale_factor)
-            bndbox['ymin'] = int(bndbox['ymin']/scale_factor)
-            bndbox['ymax'] = int(bndbox['ymax']/scale_factor)
-
-        img_name = image[1]
-        img_name = img_name.replace('.jpg', '.json')
-        writeJSONAnnotation(path+"/"+img_name, anno)
-
 
 def bndbox2polygon(bndbox):
     polygon = np.array([[bndbox['xmin'], bndbox['ymin']],
@@ -232,9 +180,9 @@ def addBndBoxes2Image(path_img, color=(255, 0, 0), alpha=0.2, thickness=5):
     img_id = anno["image_id"]
 
     for plant in anno['plants']:
-        bndbox = plant['bndbox']
-        coor_bndbox = bndbox2polygon(bndbox)
-        output = addPolygon2Image(output, coor_bndbox, color, alpha, thickness)
-
+        if plant["bndbox_id"] == "98319fa5-891e-6eb2-792b-5fba71a43d87":
+            bndbox = plant['bndbox']
+            coor_bndbox = bndbox2polygon(bndbox)
+            output = addPolygon2Image(output, coor_bndbox, color, alpha, thickness)
 
     return img_id, output
