@@ -75,25 +75,25 @@ def find_small_BB(all_anno: list):
     filenames = {}
     # iterate over all iterations
     for anno in all_anno:
+
         for plant in anno["plants"]:
             bbox = plant["bndbox"]
             width = bbox["xmax"] - bbox["xmin"]
             height = bbox["ymax"] - bbox["ymin"]
             # width less than 9 pixels
-            if width < 12 or height < 12:
-                print("Width or height is less than 12 pixels")
-                print(anno["filename"])
-                print(plant["bndbox_id"])
+            if width < 15 or height < 15:
+                #print("Width or height is less than 12 pixels")
+                print("filename:",  anno["filename"], "| plant_id", plant["plant_id"])
                 filenames[anno["filename"]] = plant["bndbox_id"]
+                anno["plants"].remove(plant)
 
+    '''    
     for file in filenames:
-        id, output = show_bndbox_of_ID(path + file,
-                                       filenames[file])
+        id, output = show_bndbox_of_ID(path + file, filenames[file])
         cv2.imshow("file", output)
         cv2.waitKey(0)
-
-
-
+    '''
+    return all_anno
 
 def get_stats_about_eppo():
     """

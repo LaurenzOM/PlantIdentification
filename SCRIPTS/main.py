@@ -23,7 +23,7 @@ if __name__ == '__main__':
     print(categories)
 
     # print the distribution of the categories in the data
-    data_representation.class_distribution(combined_anno)
+    #data_representation.class_distribution(combined_anno)
     data_query.find_small_BB(combined_anno)
     '''
     # split data into training, validation and testing
