@@ -32,64 +32,19 @@ in FUMOF plant, includes SINAR once -> doesn't make sense to train on it
 341177
 Solution: image removed
 
-file: /Users/laurenzohnemuller/DATA_PlantIdentification/images_full/T02_Box050_2017-09-05T09-18-48-260.jpg
-has a very very small bounding box with the ID: "98319fa5-891e-6eb2-792b-5fba71a43d87"
--> probably annotation error
-Solution: image removed
-
-file: /Users/laurenzohnemuller/DATA_PlantIdentification/images_full/T02_Box040_2017-09-06T11-14-06-842.jpg
-has a very very small bounding box with the ID: "69d5cf93-46ca-e9c7-4650-7346eb5c1781"
--> probably annotation error
-Solution: image removed
-
-file: /Users/laurenzohnemuller/DATA_PlantIdentification/images_full/T02_Box028_2017-09-12T08-51-37-884.jpg
-has a very very small bounding box with the ID: "5cb63320-126f-5d01-d006-44d6b30de3f7"
--> probably annotation error
-Solution: image removed
-
-file: /Users/laurenzohnemuller/DATA_PlantIdentification/images_full/T02_Box040_2017-09-05T10-33-02-658.jpg
-has a very very small bounding box with the ID: "b93584c8-9dba-3537-a4f4-13e7b36f9414"
--> probably annotation error
-Solution: image removed
-
 For the following files a plant was removed if it had a bounding box width or height < 15 pixels before resizing:
 
-filename: T02_Box040_2017-09-04T10-24-19-899.jpg | plant_id AVEFA _53c71cfe-d30e-1384-4638-cebb9dae2d51
-filename: T04_Box065_2019-08-27T06-42-53-567.jpg | plant_id PPPDD _67ce90ed-d495-390b-8484-31f495f5d171
-filename: T02_Box018_2017-09-07T10-49-46-644.jpg | plant_id AVEFA _9560cc1f-f972-ec5e-7b45-bde3e61f1a3b
-filename: T02_Box005_2017-09-20T10-04-50-856.jpg | plant_id PPPDD _df59df88-c076-a54e-d6ca-70497548ccfa
+filename: T02_Box050_2017-09-05T09-18-48-260.jpg | plant_id PPPDD _98319fa5-891e-6eb2-792b-5fba71a43d87
+filename: T02_Box040_2017-09-05T10-33-02-658.jpg | plant_id AVEFA _b93584c8-9dba-3537-a4f4-13e7b36f9414
+filename: T02_Box054_2017-10-31T11-51-21-457.jpg | plant_id PPPDD _3554fbc8-6159-bac9-93f4-f361ccc0b1d6
 filename: T02_Box018_2017-09-04T07-13-14-875.jpg | plant_id AVEFA _da2233d7-bcdb-9f3a-3205-d4678b563ffa
 filename: T02_Box062_2017-09-10T05-53-55-485.jpg | plant_id AVEFA _29253f9b-9bb2-6180-fdbf-feb37ff02978
-filename: T02_Box018_2017-09-14T08-17-52-859.jpg | plant_id AVEFA _e00152fb-ce52-b7d7-ec9f-5f87c92d741a
-filename: T02_Box028_2017-09-11T11-11-46-131.jpg | plant_id PPPMM _7edc6eea-1bed-c9e2-1313-6c7d78991732
+filename: T01_Box016_2017-05-23T11-34-03-789.jpg | plant_id PPPDD _5e30e0c8-4649-2d62-0e4f-b2998d6b3a7c
+filename: T02_Box040_2017-09-06T11-14-06-842.jpg | plant_id AVEFA _69d5cf93-46ca-e9c7-4650-7346eb5c1781
 filename: T02_Box040_2017-09-26T08-13-51-059.jpg | plant_id AVEFA _3356feb6-67c5-c07b-163f-d85e8d8cad68
-filename: T02_Box040_2017-09-05T13-05-22-999.jpg | plant_id AVEFA _28b050d5-68a9-f398-ef6a-8ae9a2214c13
-filename: T02_Box040_2017-09-05T13-05-22-999.jpg | plant_id AVEFA _a4dd5092-dd52-1953-bbe6-46bb8ada95e0
-filename: T02_Box040_2017-09-05T13-05-22-999.jpg | plant_id AVEFA _b6fdcfa6-a0f2-9816-47af-c137b6a0aeb0
-filename: T02_Box040_2017-09-05T13-05-22-999.jpg | plant_id AVEFA _baaec6e3-eb8c-e415-edf8-2c5e75db65a6
-filename: T02_Box040_2017-09-05T13-05-22-999.jpg | plant_id AVEFA _65b58261-9db8-fefe-f61b-601a44baa899
-filename: T02_Box040_2017-09-05T13-05-22-999.jpg | plant_id AVEFA _eb718bc2-f030-3a47-53d7-5e994938d7d3
-filename: T02_Box040_2017-09-05T13-05-22-999.jpg | plant_id AVEFA _fd77d6d0-1afd-f004-cbf6-ebb806a38189
-filename: T02_Box040_2017-09-04T13-27-39-473.jpg | plant_id AVEFA _1e9d704f-317a-8f94-8dac-c95cc28a14d2
-filename: T02_Box040_2017-09-04T13-27-39-473.jpg | plant_id AVEFA _65b58261-9db8-fefe-f61b-601a44baa899
-filename: T02_Box040_2017-09-04T13-27-39-473.jpg | plant_id AVEFA _a2355937-cffd-a624-fa61-f67626643d45
 filename: T02_Box018_2017-09-09T08-50-38-366.jpg | plant_id AVEFA _7dc8cbaf-60e7-d7d7-6923-8704c5a137fe
 filename: T02_Box028_2017-09-18T08-27-12-016.jpg | plant_id PPPDD _10342deb-179c-9ba6-70eb-0a9425566a35
-filename: T02_Box005_2017-09-19T08-50-43-846.jpg | plant_id ANGAR _fda6e536-af9f-4947-5978-2fbfd55a1607
-filename: T02_Box062_2017-10-21T13-02-27-288.jpg | plant_id AVEFA _3bcc46ac-b3bf-e199-c427-389be29c495f
 filename: T02_Box040_2017-09-11T11-13-03-151.jpg | plant_id AVEFA _de091b22-9928-7fd2-751e-dfb1f42950c4
-filename: T02_Box028_2017-09-17T11-28-35-836.jpg | plant_id PPPMM _2ff35ab3-ea27-8330-da51-55c10a262551
 filename: T02_Box040_2017-09-14T08-37-13-910.jpg | plant_id AVEFA _122cd276-540d-4414-5d14-3dc45a2a3aa7
-filename: T01_Box029_2017-06-08T12-06-56-722.jpg | plant_id PPPMM _5ed28e86-bf6b-b6f0-6bbb-c9965d69349b
-filename: T04_Box068_2019-08-15T06-23-33-992.jpg | plant_id PPPDD _ac278c04-cb0d-82b3-24e9-bda2c916a166
-filename: T01_Box029_2017-06-06T12-44-20-141.jpg | plant_id PPPMM _e2ac37ab-a5a4-1622-cff3-8b91fef15dfa
-filename: T02_Box062_2017-09-05T09-19-06-186.jpg | plant_id AVEFA _5f61ed70-b142-c1cd-d5b7-78c2d1c94d3e
-filename: T02_Box060_2017-09-10T05-53-53-317.jpg | plant_id PPPMM _0e82b4fa-89f5-1771-1b7a-47398cae9fbb
-filename: T02_Box060_2017-09-10T05-53-53-317.jpg | plant_id PPPMM _15e12781-7997-8f0b-909d-a43c0b4a5969
-filename: T02_Box060_2017-09-10T05-53-53-317.jpg | plant_id PPPMM _45d2f2e4-9bae-ece2-716d-8a95ede8415e
-filename: T02_Box060_2017-09-10T05-53-53-317.jpg | plant_id PPPMM _f9c6d1ef-83b2-5d78-4ff5-b72bd29e4ff7
+filename: T01_Box016_2017-05-19T10-31-18-329.jpg | plant_id PPPDD _feb0ae7f-325f-90bd-edc5-9d66419a9de9
 filename: T01_Box029_2017-05-31T09-10-06-925.jpg | plant_id CENCY _2535fcac-2cb8-758a-22c7-b4a8adae3e5c
-filename: T02_Box062_2017-09-11T10-36-44-724.jpg | plant_id AVEFA _302f588b-98b2-08de-2380-e9ad70bf3f48
-filename: T02_Box016_2017-09-14T08-17-47-283.jpg | plant_id ALOMY _07b31c31-a624-c6b8-dbf8-452cdf2f93b8
-filename: T02_Box028_2017-09-13T06-20-08-600.jpg | plant_id PPPMM _5cb63320-126f-5d01-d006-44d6b30de3f7
-filename: T02_Box038_2017-09-12T08-50-28-537.jpg | plant_id ALOMY _a165b0c0-f42c-daf4-d440-dd490b3bea9f

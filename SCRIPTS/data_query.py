@@ -20,20 +20,20 @@ def find_image_by_ID(to_find_id, all_anno):
             cv2.waitKey(0)
 
 
-def find_Image_by_EPPO(to_find_eppo, all_anno):
+def find_image_by_EPPO(to_find_eppo, all_anno):
     path = "/Users/laurenzohnemuller/DATA_PlantIdentification/images_full/"
     for img_id, row in enumerate(all_anno):
 
         for plant in row["plants"]:
             if plant["eppo"] == to_find_eppo:
                 print(path + row["filename"])
-                '''                
+
                 img = cv2.imread(path + row["filename"])
                 id, output = OPPD_utils.addBndBoxes2Image(path + row["filename"])
                 cv2.imshow("Image,", img)
                 cv2.imshow("id", output)
                 cv2.waitKey(0)
-                '''
+
 
 def show_bndbox_of_ID(img_path, bndbox_id, color=(255, 0, 0), alpha=0.2, thickness=5):
     """ Add a polygon for a specific bounding box annotation associated with the image
@@ -62,42 +62,17 @@ def show_bndbox_of_ID(img_path, bndbox_id, color=(255, 0, 0), alpha=0.2, thickne
     return img_id, output
 
 
-def find_small_BB(all_anno: list):
+def get_stats_about_eppo(all_anno: list, eppo: str):
     """
-    This method was used to find extremely small bounding boxes. Those were probably caused by an annotation error. Note
-    that this method checks for small bounding boxes before resizing
-    :param all_anno:
+    Get number of plant objects for eppo.
+    :param all_anno: A list of all annotations
+    :param eppo: A string that represents the eppo of interest
     :return:
     """
-
-    path = "/Users/laurenzohnemuller/DATA_PlantIdentification/images_full/"
-
-    filenames = {}
-    # iterate over all iterations
+    objects_in_eppo = 0
     for anno in all_anno:
-
         for plant in anno["plants"]:
-            bbox = plant["bndbox"]
-            width = bbox["xmax"] - bbox["xmin"]
-            height = bbox["ymax"] - bbox["ymin"]
-            # width less than 9 pixels
-            if width < 15 or height < 15:
-                #print("Width or height is less than 12 pixels")
-                print("filename:",  anno["filename"], "| plant_id", plant["plant_id"])
-                filenames[anno["filename"]] = plant["bndbox_id"]
-                anno["plants"].remove(plant)
+            if plant["eppo"] == eppo:
+                objects_in_eppo += 1
 
-    '''    
-    for file in filenames:
-        id, output = show_bndbox_of_ID(path + file, filenames[file])
-        cv2.imshow("file", output)
-        cv2.waitKey(0)
-    '''
-    return all_anno
-
-def get_stats_about_eppo():
-    """
-    To get as much information as possible from one plant
-    :return:
-    """
-    return None
+    print("Number of plant objects in eppo: ", eppo, " is: ", objects_in_eppo)

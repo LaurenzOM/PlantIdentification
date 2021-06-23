@@ -1,11 +1,12 @@
 import os
 
 from SCRIPTS import OPPD_utils
+from SCRIPTS import data_query
 from sklearn.model_selection import train_test_split
 from pathlib import Path
 from tqdm import tqdm
 
-from PIL import Image, ImageEnhance
+from PIL import Image, ImageEnhance, ImageStat
 
 import cv2
 import numpy as np
@@ -15,6 +16,7 @@ import urllib
 This file is used to prepare the original data in such a way that it can be used by the Scaled-YOLOv4 model. This also 
 contains data preprocessing. 
 """
+
 
 def all_images_of_path(data_path: str) -> [str, str]:
     return OPPD_utils.getImagesInFolder(data_path)
@@ -97,8 +99,8 @@ def split_data(all_anno: list) -> [list, list, list]:
     :param all_anno:  list of all annotations
     :return: a list of lists [training set, validation set, testing set]
     """
-    train_plants, test_plants = train_test_split(all_anno, test_size=0.1)
-    train_plants, val_plants = train_test_split(train_plants, test_size=0.2)
+    train_plants, test_plants = train_test_split(all_anno, test_size=0.15, random_state=30)
+    train_plants, val_plants = train_test_split(train_plants, test_size=0.15, random_state=30)
     print("size of testing set: ", len(test_plants), " | size of training set: ", len(train_plants),
           " | size of validation set: ", len(val_plants))
     return [train_plants, val_plants, test_plants]
@@ -182,6 +184,69 @@ def transform_to_darknet(all_anno: list, categories: list, dataset_type: str):
                     f"{category_idx} {x_min + bbox_width / 2} {y_min + bbox_height / 2} {bbox_width} {bbox_height}\n"
                 )
 
+def no_preprocessing(all_anno: list, categories: list, dataset_type: str):
+
+    """
+    This method resembles the transform_to_darknet method. However, in this case no cropping of the images is done.
+    They are still resized to increase download/upload speed and contrast is still added.
+    :param all_anno: a list of annotations of [multiple] image(s)
+    :param categories: a list of all categories/labels
+    :param dataset_type: a string that describes the set: either training, validation or testing
+    :return: stores pre-processed images and annotations
+    """
+
+    images_path = Path(f"plants_no_pp/images/{dataset_type}")
+    images_path.mkdir(parents=True, exist_ok=True)
+
+    labels_path = Path(f"plants_no_pp/labels/{dataset_type}")
+    labels_path.mkdir(parents=True, exist_ok=True)
+
+    path = "/Users/laurenzohnemuller/DATA_PlantIdentification/images_full"
+
+    # factor by which the images are resized
+    scale_factor = 7
+
+    # iterate through all plant annotations
+    for img_id, row in enumerate(tqdm(all_anno)):
+        # create image path and open image
+        img_id = row["image_id"]
+        image_name = f"{img_id}.jpeg"
+        img_path = path + "/" + row["filename"]
+        img = Image.open(img_path)
+
+        # resize image by scale_factor
+        width, height = img.size
+        width, height = int(width / scale_factor), int(height / scale_factor)
+        new_size = (width, height)
+        img = img.resize(new_size, 0)
+
+        # apply a high contrast to the image
+        img_contrast = contrast(img)
+        img_contrast.save(str(images_path / image_name), "JPEG")
+
+        label_name = f"{img_id}.txt"
+        with (labels_path / label_name).open(mode="w") as label_file:
+
+            # iterate over each plant in image
+            for plant in row['plants']:
+                label = plant["eppo"]
+                category_idx = categories.index(label)
+                bndbox = plant['bndbox']
+                # adjust coordinates after cropping image and after resizing
+                x_min, x_max = int((bndbox["xmin"]) / scale_factor), int((bndbox["xmax"]) / scale_factor)
+                y_min, y_max = int((bndbox["ymin"]) / scale_factor), int((bndbox["ymax"]) / scale_factor)
+
+                # normalizing coordinates
+                x_min, x_max = x_min / width, x_max / width
+                y_min, y_max = y_min / height, y_max / height
+
+                bbox_width = x_max - x_min
+                bbox_height = y_max - y_min
+
+                label_file.write(
+                    f"{category_idx} {x_min + bbox_width / 2} {y_min + bbox_height / 2} {bbox_width} {bbox_height}\n"
+                )
+
 def contrast(img):
     """
     This method adds contrast to a given image with a factor of 1.3, where 1 is adding no contrast.
@@ -198,75 +263,64 @@ def contrast(img):
     return img_contrast
 
 
-
-'''
-def contrast():
-    data_path = "/Users/laurenzohnemuller/PycharmProjects/PlantIdentification/plants/images/test/285444.jpeg"
-
-    matplotlib.rcParams['font.size'] = 9
-
-    # Load an example image
-    img = io.imread(data_path)
-    img = rgb2gray(img)
-    img = img_as_ubyte(img)
-
-    # Global equalize
-    img_rescale = exposure.equalize_hist(img)
-
-    # Equalization
-    selem = disk(30)
-    img_eq = rank.equalize(img, selem=selem)
-
-    # Display results
-    fig = plt.figure(figsize=(8, 5))
-    axes = np.zeros((2, 3), dtype=np.object)
-    axes[0, 0] = plt.subplot(2, 3, 1)
-    axes[0, 1] = plt.subplot(2, 3, 2, sharex=axes[0, 0], sharey=axes[0, 0])
-    axes[0, 2] = plt.subplot(2, 3, 3, sharex=axes[0, 0], sharey=axes[0, 0])
-    axes[1, 0] = plt.subplot(2, 3, 4)
-    axes[1, 1] = plt.subplot(2, 3, 5)
-    axes[1, 2] = plt.subplot(2, 3, 6)
-
-    ax_img, ax_hist, ax_cdf = plot_img_and_hist(img, axes[:, 0])
-    ax_img.set_title('Low contrast image')
-    ax_hist.set_ylabel('Number of pixels')
-
-    ax_img, ax_hist, ax_cdf = plot_img_and_hist(img_rescale, axes[:, 1])
-    ax_img.set_title('Global equalise')
-
-    ax_img, ax_hist, ax_cdf = plot_img_and_hist(img_eq, axes[:, 2])
-    ax_img.set_title('Local equalize')
-    ax_cdf.set_ylabel('Fraction of total intensity')
-
-    # prevent overlap of y-axis labels
-    fig.tight_layout()
-    plt.show()
-
-def plot_img_and_hist(image, axes, bins=256):
-    """Plot an image along with its histogram and cumulative histogram.
-
+def remove_small_bbox(all_anno: list):
     """
-    ax_img, ax_hist = axes
-    ax_cdf = ax_hist.twinx()
+    This method was used to find extremely small bounding boxes. Those were probably caused by an annotation error. Note
+    that this method checks for small bounding boxes before resizing
+    :param all_anno:
+    :return:
+    """
 
-    # Display image
-    ax_img.imshow(image, cmap=plt.cm.gray)
-    ax_img.set_axis_off()
+    path = "/Users/laurenzohnemuller/DATA_PlantIdentification/images_full/"
+    print("The following plants were removed in the corresponding file since there bbox were too small:")
+    filenames = {}
+    # iterate over all iterations
+    for anno in all_anno:
 
-    # Display histogram
-    ax_hist.hist(image.ravel(), bins=bins)
-    ax_hist.ticklabel_format(axis='y', style='scientific', scilimits=(0, 0))
-    ax_hist.set_xlabel('Pixel intensity')
+        for plant in anno["plants"]:
+            bbox = plant["bndbox"]
+            width = bbox["xmax"] - bbox["xmin"]
+            height = bbox["ymax"] - bbox["ymin"]
+            # width less than 9 pixels
+            if width < 15 and height < 15:
+                print("filename:", anno["filename"], "| plant_id", plant["plant_id"])
+                filenames[anno["filename"]] = plant["bndbox_id"]
+                anno["plants"].remove(plant)
 
-    xmin, xmax = dtype_range[image.dtype.type]
-    ax_hist.set_xlim(xmin, xmax)
-
-    # Display cumulative distribution
-    img_cdf, bins = exposure.cumulative_distribution(image, bins)
-    ax_cdf.plot(bins, img_cdf, 'r')
-
-    return ax_img, ax_hist, ax_cdf
-'''
+    '''    
+    for file in filenames:
+        id, output = data_query.show_bndbox_of_ID(path + file, filenames[file])
+        cv2.imshow("file", output)
+        cv2.waitKey(0)
+    '''
+    return all_anno
 
 
+def remove_duplicates(img_path1: str, img_path2: str):
+    """
+    Method to search for duplicate images in two different paths by using the pixel mean.
+    :param img_path1: Image path one
+    :param img_path2: Image path two that the images are compared two
+    :return:
+    """
+    img_files1 = [_ for _ in os.listdir(img_path1) if _.endswith("jpeg")]
+    img_files2 = [_ for _ in os.listdir(img_path2) if _.endswith("jpeg")]
 
+    duplicates = []
+
+    for img_file in tqdm(img_files1):
+        if not img_file in duplicates:
+            # convert to grayscale for efficiency
+            img = Image.open(os.path.join(img_path1, img_file)).convert('LA')
+            pixel_mean = ImageStat.Stat(img).mean
+
+            for img_file_check in img_files2:
+                if img_file != img_file_check:
+                    img_check = Image.open(os.path.join(img_path2, img_file_check)).convert('LA')
+                    pixel_mean_check = ImageStat.Stat(img_check).mean
+
+                    if pixel_mean == pixel_mean_check:
+                        duplicates.append(img_file)
+                        duplicates.append(img_file_check)
+
+    print(duplicates)
