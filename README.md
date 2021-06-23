@@ -4,6 +4,7 @@ This repository stores the code-base of my bachelor thesis. This thesis tries to
 
 How to run the data pre-processing script: 
 - upload data
+- adjust path in main
 - run main
 - zip plants directory (add data.yaml file in same directory)
 - upload zip file to google drive
